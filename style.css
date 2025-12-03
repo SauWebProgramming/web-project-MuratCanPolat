@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    user-select: none; /* Kullanıcının ekrandaki yazıları seçememsini sağlıyor. Yeni bilgi! */
+}
+
+body {
+    background-color: #1a1a2e;
+    overflow: hidden;
+    height: 100vh; /* Responsive değil ama şık görünüyor ve küçük olduğu için herhangi bir şeyi bozmuyor. Şimdilik iyi */
+    width: 100vw;
+    position: relative;
+}
+
+canvas { 
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; 
+}
+
+#uiContainer {
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    animation: slideIn 0.8s ease-out;
+}
+
+#uiContainer h1 {
+    color: #ffffff;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 25px;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
+}
+
+#nickname {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: none;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    text-align: center;
+    color: #333;
+    outline: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#nickname:focus {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+#colorPicker {
+    width: 100%;
+    height: 45px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    margin-bottom: 25px;
+    transition: transform 0.2s;
+}
+
+#colorPicker:hover {
+    transform: scale(1.02);
+}
+
+/* Chrome ve Edge için renk seçimi tasarımı. Umarım diğer tarayıcılarda da düzgün çalışıyordur. Kontrol et! */
+#colorPicker::-webkit-color-swatch-wrapper { 
+    padding: 0;
+}
+#colorPicker::-webkit-color-swatch {
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+}
+
+#playButton {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b); /* Sol alt ve sağ üst arasında yumuşak bir renk geçişi sağlar. Yeni bilgi! */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+    transition: all 0.3s ease;
+}
+
+#playButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 75, 43, 0.6);
+}
+
+#playButton:active {
+    transform: scale(0.95); /* Tıklama hissi oluşturuyor. Not alındı. */
+}
+
+#highScore {
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Sayfa açıldığında panelin üstten sayfanın ortasına animasyonlu şekilde geçmesini sağlıyor. */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -100%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Aşırı küçük ekranlarda çalışması için ufak bir dokunuş */
+@media (max-width: 600px) {
+    #uiContainer {
+        width: 90%;
+        padding: 25px;
+    }
+    
+    #uiContainer h1 {
+        font-size: 1.8rem;
+    }
+}

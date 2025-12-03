@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agar.io Klonu</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="uiContainer">
+        <h1>Agar.io Klonu</h1>
+        <input type="text" id="nickname" placeholder="Takma Adınız" required>
+        <input type="color" id="colorPicker" value="#ff0000">
+        <button id="playButton">Oyunu Başlat</button>
+        <div id="highScore">En Yüksek Skor: 0</div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <script type="module" src="js/Game.js"></script>
+</body>
+</html>
