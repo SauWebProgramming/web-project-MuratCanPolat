@@ -124,6 +124,18 @@ canvas {
     font-weight: 600;
     letter-spacing: 0.5px;
 }
+#gameScore{
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    pointer-events: none;
+    text-shadow: 2px 2px 4px #000;
+    z-index: 5;
+    display: none;
+}
 
 /* Sayfa açıldığında panelin üstten sayfanın ortasına animasyonlu şekilde geçmesini sağlıyor. */
 @keyframes slideIn {

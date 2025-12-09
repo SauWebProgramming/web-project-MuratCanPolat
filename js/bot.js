@@ -1,57 +1,92 @@
+const botNames = [
+    "Terminator", "Vortex", "Nebula", "Shadow", "ProGamer", "Zelda", 
+    "Hercules", "Venom", "Spider", "Ghost", "Viper", "Matrix",
+    "Zeus", "Hades", "Poseidon", "Helios", "Athena", "Ares", "Apollo",
+    "Kratos", "Atreus", "Brok", "Sindri", "Mimir", "Thor", "Odin", "Loki",
+    "Hermes", "Tyr","Baldur","Gaia","Cronos"
+];
+
+let availableNames = [...botNames];
+
 export default class Bot {
     constructor(worldWidth, worldHeight) {
         this.worldWidth = worldWidth;
         this.worldHeight = worldHeight;
+        
         this.x = Math.random() * worldWidth;
         this.y = Math.random() * worldHeight;
         
-        /* Botlar farklı büyüklüklerde başlasın */
-        this.radius = 15 + Math.random() * 20; 
-        
+        this.radius = 18 + Math.random() * 10; 
         this.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
         
-        const botNames = [
-        "Terminator", "Vortex", "Nebula", "Shadow", "ProGamer", 
-        "NoobMaster", "AgarKing", "Zelda", "Goku", "Piccolo", 
-        "Venom", "Spider", "Ghost", "Viper", "Matrix",
-        "Soap", "Yasuo", "Slayer", "Titan", "Monster"
-    ];
-    this.name = botNames[Math.floor(Math.random() * botNames.length)];
+        if (availableNames.length === 0) {
+            availableNames = [...botNames];
+        }
+
+        const randomIndex = Math.floor(Math.random() * availableNames.length);
+
+        this.name = availableNames[randomIndex];
+
+        availableNames.splice(randomIndex, 1);
+
+        this.speed = 0;
     }
 
-    update(player, foods) {
-        // Hız formülü
-        this.speed = 500 / (this.radius + 120);
-        
+    update(player, foods, bots) {
+        this.speed = 500 / (this.radius * 2 + 120);
+
+        let closestEntity = null;
+        let minDist = Infinity;
+
+        const dxP = player.x - this.x;
+        const dyP = player.y - this.y;
+        const distP = Math.sqrt(dxP*dxP + dyP*dyP);
+
+        if (distP < 500) {
+            closestEntity = player;
+            minDist = distP;
+        }
+
+        if (bots) {
+            for (const otherBot of bots) {
+                if (otherBot === this) continue;
+                const dxB = otherBot.x - this.x;
+                const dyB = otherBot.y - this.y;
+                const distB = Math.sqrt(dxB*dxB + dyB*dyB);
+                if (distB < 500 && distB < minDist) {
+                    minDist = distB;
+                    closestEntity = otherBot;
+                }
+            }
+        }
+
         let targetX = this.x;
         let targetY = this.y;
-        
-        const dx = player.x - this.x;
-        const dy = player.y - this.y;
-        const distToPlayer = Math.sqrt(dx*dx + dy*dy);
-        
-        if (distToPlayer < 400) {
-            if (player.radius > this.radius * 1.1) {
-                targetX = this.x - dx;
-                targetY = this.y - dy;
-            } else if (this.radius > player.radius * 1.1) {
-                targetX = player.x;
-                targetY = player.y;
+
+        if (closestEntity) {
+            if (closestEntity.radius > this.radius * 1.1) {
+                targetX = this.x - (closestEntity.x - this.x);
+                targetY = this.y - (closestEntity.y - this.y);
+            } else if (this.radius > closestEntity.radius * 1.1) {
+                targetX = closestEntity.x;
+                targetY = closestEntity.y;
+            } else {
+                closestEntity = null; 
             }
-        } else {
+        }
+
+        if (!closestEntity) {
             let closestFood = null;
-            let minDist = Infinity;
+            let minFoodDist = Infinity;
             for (const food of foods) {
-                const fDx = food.x - this.x;
-                const fDy = food.y - this.y;
-                const dist = fDx*fDx + fDy*fDy; 
-                
-                if (dist < minDist) {
-                    minDist = dist;
+                const dxF = food.x - this.x;
+                const dyF = food.y - this.y;
+                const distSq = dxF*dxF + dyF*dyF;
+                if (distSq < minFoodDist) {
+                    minFoodDist = distSq;
                     closestFood = food;
                 }
             }
-
             if (closestFood) {
                 targetX = closestFood.x;
                 targetY = closestFood.y;
@@ -76,10 +111,19 @@ export default class Bot {
         ctx.fill();
         ctx.closePath();
 
-        const fontSize = Math.max(12, this.radius / 1.5);
-        ctx.fillStyle = 'white';
-        ctx.font = `bold ${fontSize}px Poppins`;
+        let fontSize = Math.max(14, this.radius * 0.6); 
+        
+        if(this.name.length > 10) { fontSize *= 0.85; }
+
+        ctx.font = `800 ${fontSize}px 'Poppins'`;
         ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        ctx.lineWidth = Math.max(2, fontSize * 0.1);
+        ctx.strokeStyle = '#1a1a1a';
+        ctx.strokeText(this.name, this.x, this.y);
+
+        ctx.fillStyle = '#ffffff';
         ctx.fillText(this.name, this.x, this.y);
     }
 }
