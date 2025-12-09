@@ -1,4 +1,6 @@
 import Player from './player.js';
+import Food from './food.js';
+import Bot from './bot.js'
 
 class Game {
     /* Javascript'te constructor tanımlamak için "constructor" yazmak gerekiyormuş. Diğer türlü bunu bir metod olarak kabul ediyor. C# ve C++ tan farklı. */
@@ -14,6 +16,12 @@ class Game {
 
         this.isRunning = false;
         this.player = null;
+
+        this.foods = [];
+        this.foodCount = 500;
+
+        this.bots = [];
+        this.botCount = 20;
 
         /* Kullanıcının seçtiği verileri oyuna aktarma */
         this.uiContainer = document.getElementById('uiContainer');
@@ -50,6 +58,16 @@ class Game {
         this.uiContainer.style.display = 'none';
 
         this.player = new Player(this.worldWidth / 2, this.worldHeight / 2, 20, color, name);
+        this.player.score = 0;
+        this.foods = [];
+        for (let i = 0; i < this.foodCount; i++) {
+        this.foods.push(new Food(this.worldWidth, this.worldHeight));
+        }
+
+        this.bots = [];
+        for(let i=0; i < this.botCount; i++) {
+        this.bots.push(new Bot(this.worldWidth, this.worldHeight));
+    }
 
         this.isRunning = true;
         this.animate();
@@ -73,6 +91,62 @@ class Game {
         this.ctx.stroke();
     }
 
+    checkCollisions() {
+        for (let i = this.foods.length - 1; i >= 0; i--) {
+            const food = this.foods[i];
+            
+            /* Oyuncu ve yem arası mesafe hesaplama */
+            const dx = this.player.x - food.x;
+            const dy = this.player.y - food.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            if (distance < this.player.radius + food.radius) {
+                
+                /* Listeden silme işlemi */
+                this.foods.splice(i, 1);
+
+                this.player.radius += 0.2;
+                this.player.score += 10;
+                this.foods.push(new Food(this.worldWidth, this.worldHeight));
+            }
+        }
+        this.bots.forEach(bot => {
+         for (let i = this.foods.length - 1; i >= 0; i--) {
+             const food = this.foods[i];
+             const dx = bot.x - food.x;
+             const dy = bot.y - food.y;
+             const dist = Math.sqrt(dx*dx + dy*dy);
+             
+             if (dist < bot.radius + food.radius) {
+                 this.foods.splice(i, 1);
+                 bot.radius += 0.2;
+                 this.foods.push(new Food(this.worldWidth, this.worldHeight));
+             }
+         }
+    });
+
+    for (let i = this.bots.length - 1; i >= 0; i--) {
+        const bot = this.bots[i];
+        const dx = this.player.x - bot.x;
+        const dy = this.player.y - bot.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+
+        if (dist < this.player.radius + bot.radius) {
+            if (this.player.radius > bot.radius * 1.1) {
+                this.bots.splice(i, 1); 
+                this.player.radius += bot.radius * 0.2; 
+                this.player.score += 100; 
+                this.bots.push(new Bot(this.worldWidth, this.worldHeight));
+                console.log("Bir botu yedin!");
+            }
+            else if (bot.radius > this.player.radius * 1.1) {
+                alert("OYUN BİTTİ! Skorunuz: " + this.player.score);
+                location.reload();
+            }
+        }
+    }
+    }
+
     animate() {
         if (!this.isRunning) return;
 
@@ -87,9 +161,20 @@ class Game {
 
         this.drawGrid();
 
+        this.foods.forEach(food => food.draw(this.ctx));
+
+        this.bots.forEach(bot => {
+        bot.update(this.player, this.foods);
+        bot.draw(this.ctx); 
+        });
+
+        this.checkCollisions();
+
+        
+
         this.player.update(this.canvas.width, this.canvas.height);
        
-       this.player.x = Math.max(this.player.radius, Math.min(this.worldWidth - this.player.radius, this.player.x));
+        this.player.x = Math.max(this.player.radius, Math.min(this.worldWidth - this.player.radius, this.player.x));
         this.player.y = Math.max(this.player.radius, Math.min(this.worldHeight - this.player.radius, this.player.y));
        
         this.player.draw(this.ctx);

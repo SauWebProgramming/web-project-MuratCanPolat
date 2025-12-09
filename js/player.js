@@ -6,7 +6,8 @@ export default class Player {
         this.radius = radius;
         this.color = color;
         this.name = name;
-        this.speed = 2;
+        /*this.speed = 2;*/
+        this.speed = 500 / (this.radius + 120);
         this.mouse = { x: 0, y: 0 };
     }
 
@@ -29,9 +30,10 @@ draw(ctx) {
         ctx.fillStyle = this.color;
         ctx.fill();
         ctx.closePath();
+        const fontSize = Math.max(12, this.radius / 1.5);
 
         ctx.fillStyle = 'white';
-        ctx.font = '14px Poppins';
+        ctx.font = `bold ${fontSize}px Poppins`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(this.name, this.x, this.y);
