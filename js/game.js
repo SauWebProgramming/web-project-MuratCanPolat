@@ -59,10 +59,19 @@ class Game {
     startGame() {
         const name = this.nicknameInput.value;
         const color = this.colorPicker.value;
+        const notification = document.getElementById('notification');
 
         if (name.trim() === "") {
-            alert("Lütfen bir isim giriniz!");
-            return;
+        notification.innerText = "⚠️ Lütfen bir isim giriniz!";
+        notification.classList.add('show');
+
+        this.nicknameInput.classList.add('shake-input');
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            this.nicknameInput.classList.remove('shake-input');
+        }, 3000);
+        return; 
         }
 
         this.uiContainer.style.display = 'none';
@@ -206,7 +215,6 @@ class Game {
 
         this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
         
-        // 2. Zoom işlemini uygula
         this.ctx.scale(scale, scale);
         
         this.ctx.translate(-this.player.x, -this.player.y);
@@ -316,6 +324,28 @@ class Game {
     } else {
         this.newRecordMsg.style.display = 'none';
     }
+    const duration = 3000;
+    const end = Date.now() + duration;
+
+    (function frame() {
+        confetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#ff0', '#f00', '#0f0']
+        });
+        confetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#00f', '#0ff', '#f0f']
+        });
+        if (Date.now() < end) {
+            requestAnimationFrame(frame);
+        }
+    }());
 }
 }
 

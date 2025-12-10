@@ -1,7 +1,6 @@
-// --- İSİM HAVUZU ---
 const botNames = [
     "Terminator", "Vortex", "Nebula", "Shadow", "ProGamer", "Zelda", 
-    "Hercules", "Venom", "Spider", "Ghost", "Viper", "Matrix",
+    "Hercules", "Venom", "Spider", "Ghost", "Viper", "Matrix","Neo","Morpheus","Trinity","The Merovingian","Oracle",
     "Zeus", "Hades", "Poseidon", "Helios", "Athena", "Ares", "Apollo",
     "Kratos", "Atreus", "Brok", "Sindri", "Mimir", "Thor", "Odin", "Loki",
     "Hermes", "Tyr","Baldur","Gaia","Cronos"

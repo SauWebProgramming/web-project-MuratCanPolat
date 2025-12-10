@@ -51,7 +51,7 @@ canvas {
 }
 
 #nickname {
-    width: 100%;
+   width: 100%;
     padding: 15px;
     margin-bottom: 15px;
     border: none;
@@ -63,10 +63,49 @@ canvas {
     outline: none;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 #nickname:focus {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+/* Hover ve focus un çakışmaması için :not() kullanılıyormuş. */
+#nickname:hover:not(:focus){
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 1); 
+    cursor: text;
+}
+#notification {
+    position: absolute;
+    background-color: #ff4757;
+    color: white;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    visibility: hidden;
+}
+
+#notification.show {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
+}
+
+.shake-input {
+    animation: shake 0.4s ease-in-out;
+    border-color: #ff4757 !important;
+    box-shadow: 0 0 15px rgba(255, 71, 87, 0.4) !important;
 }
 
 #colorPicker {
@@ -213,7 +252,7 @@ canvas {
 
 #restartButton:hover {
     transform: scale(1.05);
-    background: #ff416c;
+    background: linear-gradient(45deg, #ff416c, #ff4b2b);
     color: white;
     box-shadow: 0 0 20px rgba(255, 65, 108, 0.6);
 }

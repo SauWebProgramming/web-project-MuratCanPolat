@@ -10,6 +10,7 @@
     <div id="uiContainer">
         <h1>Agar.io Klonu</h1>
         <input type="text" id="nickname" placeholder="Takma Adınız" required>
+        <div id="notification" class="hidden">⚠️ Lütfen bir isim giriniz!</div>
         <input type="color" id="colorPicker" value="#00B3FF">
         <button id="playButton">Oyunu Başlat</button>
         <div id="highScore">En Yüksek Skor: 0</div>
@@ -28,6 +29,7 @@
     </div>
     <canvas id="gameCanvas"></canvas>
     <div id="gameScore" >Skor: 0</div>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script type="module" src="js/Game.js"></script>
 </body>
 </html>
