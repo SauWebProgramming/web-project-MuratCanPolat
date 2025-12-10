@@ -15,8 +15,10 @@ export default class Player {
         /*Oyuncu ekranın ortasında kalacağı için haritanın ortasını baz alıyoruz ve fareye olan uzaklığını hesaplıyoruz. İlginç */
         const dx = this.mouse.x - (canvasWidth / 2);
         const dy = this.mouse.y - (canvasHeight / 2);
-
-        this.speed = 1000 / (this.radius + 200);
+        /* Hız dengesini bir türlü ayarlayamadığım için logaritmik bir formüle geçtim.*/
+        let calculatedSpeed = 2.5 * Math.pow(35 / this.radius, 0.45);
+        /* Büyük oyuncunun aşırı yavaş olmamasını sağlıyor */
+        this.speed = Math.max(1.3, calculatedSpeed);
         /* Fare ile oyuncu arasında oluşan açıyı hesaplama */ 
         const angle = Math.atan2(dy, dx);
         /* O açıya doğru belirlediğimiz hızla ilerleme */

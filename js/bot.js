@@ -36,7 +36,10 @@ export default class Bot {
     }
 
     update(player, foods, bots) {
-        this.speed = 1000 / (this.radius + 200);
+        /* Hız dengesini bir türlü ayarlayamadığım için logaritmik bir formüle geçtim.*/
+        let calculatedSpeed = 2.5 * Math.pow(35 / this.radius, 0.45);
+        /* Büyük oyuncunun aşırı yavaş olmamasını sağlıyor */
+        this.speed = Math.max(1.3, calculatedSpeed);
 
         if (this.decisionTimer > 0) this.decisionTimer--;
 

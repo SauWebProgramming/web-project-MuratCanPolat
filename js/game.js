@@ -47,6 +47,13 @@ class Game {
             highScoreEl.innerText = `En Yüksek Skor: ${savedScore}`;
             highScoreEl.style.display = 'block';
         }
+        
+        this.gameOverScreen = document.getElementById('gameOverScreen');
+        this.finalScoreEl = document.getElementById('finalScore');
+        this.newRecordMsg = document.getElementById('newRecordMsg');
+        this.restartButton = document.getElementById('restartButton');
+    
+        this.restartButton.addEventListener('click', () => location.reload());
     }
 
     startGame() {
@@ -144,19 +151,7 @@ class Game {
                     this.bots.push(new Bot(this.worldWidth, this.worldHeight));
                 }
                 else if (bot.radius > this.player.radius * 1.1) {
-                    const currentScore = Math.floor(this.player.score);
-                    const highScore = localStorage.getItem('highScore') || 0;
-                    
-                    let message = `OYUN BİTTİ!\nSkorunuz: ${currentScore}`;
-
-                    if (Number(currentScore) > Number(highScore)) {
-                        localStorage.setItem('highScore', currentScore);
-                        message += `\nTEBRİKLER! YENİ YÜKSEK REKOR! 🏆`;
-                    } else {
-                        message += `\nEn Yüksek Skor: ${highScore}`;
-                    }
-                    alert(message);
-                    location.reload();
+                    this.showGameOver();
                 }
             }
         }
@@ -186,6 +181,9 @@ class Game {
                     }
                 }
             }
+        }
+        if (this.player.score >= 15000) {
+        this.showVictory();
         }
     }
 
@@ -275,6 +273,49 @@ class Game {
 
             listElement.appendChild(li);
         });
+    }
+    showGameOver() {
+    this.isRunning = false;
+    
+    const currentScore = Math.floor(this.player.score);
+    const highScore = localStorage.getItem('highScore') || 0;
+    
+    this.gameOverScreen.style.display = 'block';
+    this.finalScoreEl.innerText = `Skorunuz: ${currentScore}`;
+    
+    if (currentScore > parseInt(highScore)) {
+        localStorage.setItem('highScore', currentScore);
+        this.newRecordMsg.style.display = 'block';
+    } else {
+        this.newRecordMsg.style.display = 'none';
+    }
+    }
+
+    showVictory() {
+    this.isRunning = false;
+    
+    const currentScore = Math.floor(this.player.score);
+    const highScore = localStorage.getItem('highScore') || 0;
+    
+    this.gameOverScreen.style.display = 'block';
+    
+    const titleEl = this.gameOverScreen.querySelector('h1');
+    titleEl.innerText = "TEBRİKLER ŞAMPİYON!";
+    titleEl.style.color = "#ffd700";
+    
+    this.gameOverScreen.style.border = "2px solid #ffd700";
+    this.gameOverScreen.style.boxShadow = "0 0 50px rgba(255, 215, 0, 0.6)";
+
+    this.finalScoreEl.innerText = `Skorunuz: ${currentScore}`;
+    this.finalScoreEl.style.color = "#ffffff";
+
+    if (currentScore > parseInt(highScore)) {
+        localStorage.setItem('highScore', currentScore);
+        this.newRecordMsg.style.display = 'block';
+        this.newRecordMsg.innerText = "🏆 EFSANEVİ REKOR! 🏆";
+    } else {
+        this.newRecordMsg.style.display = 'none';
+    }
 }
 }
 
