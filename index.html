@@ -2,20 +2,23 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Agar.io Klonu</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1a1a2e">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3930/3930432.png">
 </head>
 <body>
-    <div id="uiContainer">
+    <section id="uiContainer">
         <h1>Agar.io Klonu</h1>
         <input type="text" id="nickname" placeholder="Takma Adınız" required>
         <div id="notification" class="hidden">⚠️ Lütfen bir isim giriniz!</div>
         <input type="color" id="colorPicker" value="#00B3FF">
         <button id="playButton">Oyunu Başlat</button>
         <div id="highScore">En Yüksek Skor: 0</div>
-    </div>
-
+    </section>
+    <main>
     <div id="gameOverScreen" style="display: none;">
     <h1 style="color: #ff416c;">Oyun Bitti!</h1>
     <p id="finalScore" style="font-size: 1.5rem; margin: 10px 0; color: white;">Skorunuz: 0</p>
@@ -31,5 +34,14 @@
     <div id="gameScore" >Skor: 0</div>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script type="module" src="js/Game.js"></script>
+    /* Bu kısım oyunun mobilde de çalışmasını sağlıyor */
+    <script>
+    if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log('PWA Service Worker Hazır! 📡'))
+      .catch((err) => console.log('PWA Hatası:', err));
+    }
+    </script>
+    </main>
 </body>
 </html>

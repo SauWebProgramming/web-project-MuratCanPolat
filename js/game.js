@@ -22,12 +22,23 @@ class Game {
         this.bots = [];
         this.botCount = 20;
 
+        this.playerStartRadius = 30;
+
         this.uiContainer = document.getElementById('uiContainer');
         this.playButton = document.getElementById('playButton');
         this.nicknameInput = document.getElementById('nickname');
         this.colorPicker = document.getElementById('colorPicker');
 
         this.playButton.addEventListener('click', () => this.startGame());
+        /* Bu kısım oyunun mobilde de çalışmasını sağlıyor */
+        window.addEventListener('touchmove', (e) => {
+        e.preventDefault(); 
+    
+        if (this.player && e.touches.length > 0) {
+        this.player.mouse.x = e.touches[0].clientX;
+        this.player.mouse.y = e.touches[0].clientY;
+        }
+        }, { passive: false });
 
         window.addEventListener('resize', () => {
             this.canvas.width = window.innerWidth;
@@ -54,6 +65,24 @@ class Game {
         this.restartButton = document.getElementById('restartButton');
     
         this.restartButton.addEventListener('click', () => location.reload());
+
+        this.loadGameConfig();
+    }
+    async loadGameConfig() {
+        try {
+            const response = await fetch('./config.json');
+            const config = await response.json();
+
+            this.worldWidth = config.worldWidth;
+            this.worldHeight = config.worldHeight;
+            this.foodCount = config.foodCount;
+            this.botCount = config.botCount;
+            this.playerStartRadius = config.playerStartRadius;
+            
+            console.log("Ayarlar config.json üzerinden yüklendi! 📡");
+        } catch (error) {
+            console.error("Config yüklenemedi, varsayılanlar kullanılıyor.", error);
+        }
     }
 
     startGame() {
@@ -80,7 +109,7 @@ class Game {
         
         document.getElementById('gameScore').style.display = 'block';
 
-        this.player = new Player(this.worldWidth / 2, this.worldHeight / 2, 30, color, name);
+        this.player = new Player(this.worldWidth / 2, this.worldHeight / 2, this.playerStartRadius, color, name);
         this.player.score = 0;
         
         this.foods = [];

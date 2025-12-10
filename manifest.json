@@ -1,0 +1,16 @@
+{
+  "name": "Agar.io Klonu",
+  "short_name": "Agar.io",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3930/3930432.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "worldWidth": 5000,
+  "worldHeight": 5000,
+  "foodCount": 500,
+  "botCount": 20,
+  "playerStartRadius": 30,
+  "zoomStartRadius": 60
+}
