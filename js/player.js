@@ -16,7 +16,7 @@ export default class Player {
         const dx = this.mouse.x - (canvasWidth / 2);
         const dy = this.mouse.y - (canvasHeight / 2);
 
-        this.speed = 500 / (this.radius * 2 + 120);
+        this.speed = 1000 / (this.radius + 200);
         /* Fare ile oyuncu arasında oluşan açıyı hesaplama */ 
         const angle = Math.atan2(dy, dx);
         /* O açıya doğru belirlediğimiz hızla ilerleme */

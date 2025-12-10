@@ -1,3 +1,4 @@
+// --- İSİM HAVUZU ---
 const botNames = [
     "Terminator", "Vortex", "Nebula", "Shadow", "ProGamer", "Zelda", 
     "Hercules", "Venom", "Spider", "Ghost", "Viper", "Matrix",
@@ -24,16 +25,20 @@ export default class Bot {
         }
 
         const randomIndex = Math.floor(Math.random() * availableNames.length);
-
         this.name = availableNames[randomIndex];
-
         availableNames.splice(randomIndex, 1);
 
         this.speed = 0;
+
+        this.targetX = this.x;
+        this.targetY = this.y;
+        this.decisionTimer = 0;
     }
 
     update(player, foods, bots) {
-        this.speed = 500 / (this.radius * 2 + 120);
+        this.speed = 1000 / (this.radius + 200);
+
+        if (this.decisionTimer > 0) this.decisionTimer--;
 
         let closestEntity = null;
         let minDist = Infinity;
@@ -60,41 +65,48 @@ export default class Bot {
             }
         }
 
-        let targetX = this.x;
-        let targetY = this.y;
-
         if (closestEntity) {
             if (closestEntity.radius > this.radius * 1.1) {
-                targetX = this.x - (closestEntity.x - this.x);
-                targetY = this.y - (closestEntity.y - this.y);
+                this.targetX = this.x - (closestEntity.x - this.x);
+                this.targetY = this.y - (closestEntity.y - this.y);
+                this.decisionTimer = 0;
             } else if (this.radius > closestEntity.radius * 1.1) {
-                targetX = closestEntity.x;
-                targetY = closestEntity.y;
+                this.targetX = closestEntity.x;
+                this.targetY = closestEntity.y;
+                this.decisionTimer = 0;
             } else {
-                closestEntity = null; 
+                closestEntity = null;
             }
         }
 
-        if (!closestEntity) {
+        if (!closestEntity && this.decisionTimer <= 0) {
             let closestFood = null;
             let minFoodDist = Infinity;
+            
             for (const food of foods) {
                 const dxF = food.x - this.x;
                 const dyF = food.y - this.y;
-                const distSq = dxF*dxF + dyF*dyF;
-                if (distSq < minFoodDist) {
+                const distSq = dxF*dxF + dyF*dyF; 
+                
+                if (distSq < 1000 * 1000 && distSq < minFoodDist) {
                     minFoodDist = distSq;
                     closestFood = food;
                 }
             }
+
             if (closestFood) {
-                targetX = closestFood.x;
-                targetY = closestFood.y;
+                this.targetX = closestFood.x;
+                this.targetY = closestFood.y;
+                this.decisionTimer = 20;
+            } else {
+                this.targetX = Math.random() * this.worldWidth;
+                this.targetY = Math.random() * this.worldHeight;
+                this.decisionTimer = 60; 
             }
         }
 
-        const moveDx = targetX - this.x;
-        const moveDy = targetY - this.y;
+        const moveDx = this.targetX - this.x;
+        const moveDy = this.targetY - this.y;
         const angle = Math.atan2(moveDy, moveDx);
         
         this.x += Math.cos(angle) * this.speed;

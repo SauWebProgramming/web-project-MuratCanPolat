@@ -1,6 +1,6 @@
-import Player from './Player.js';
-import Food from './Food.js';
-import Bot from './Bot.js';
+import Player from './player.js';
+import Food from './food.js';
+import Bot from './bot.js';
 
 class Game {
     constructor(){
@@ -59,10 +59,12 @@ class Game {
         }
 
         this.uiContainer.style.display = 'none';
+
+        document.getElementById('leaderboard').style.display = 'block';
         
         document.getElementById('gameScore').style.display = 'block';
 
-        this.player = new Player(this.worldWidth / 2, this.worldHeight / 2, 20, color, name);
+        this.player = new Player(this.worldWidth / 2, this.worldHeight / 2, 30, color, name);
         this.player.score = 0;
         
         this.foods = [];
@@ -80,7 +82,7 @@ class Game {
     }
 
     drawGrid(){
-        const step = 50;
+        const step = 100;
         this.ctx.beginPath();
         this.ctx.lineWidth = 1;
         this.ctx.strokeStyle = '#2c2c2c';
@@ -193,21 +195,36 @@ class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.save();
 
-        const camX = this.canvas.width / 2 - this.player.x;
-        const camY = this.canvas.height / 2 - this.player.y;
+       let scale = 1;
+        const zoomStartRadius = 60; 
+        const minZoom = 0.25;
 
-        this.ctx.translate(camX, camY);
+        if (this.player.radius > zoomStartRadius) {
+        let growthRatio = zoomStartRadius / this.player.radius;
+        scale = Math.pow(growthRatio, 0.5);
+        scale = Math.max(minZoom, scale);
+        
+        }
+
+        this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+        
+        // 2. Zoom işlemini uygula
+        this.ctx.scale(scale, scale);
+        
+        this.ctx.translate(-this.player.x, -this.player.y);
 
         this.drawGrid();
 
         this.foods.forEach(food => food.draw(this.ctx));
 
         this.bots.forEach(bot => {
-            bot.update(this.player, this.foods, this.bots); 
+            bot.update(this.player, this.foods, this.bots);
             bot.draw(this.ctx); 
         });
 
         this.checkCollisions();
+
+        this.updateLeaderboard();
 
         this.player.update(this.canvas.width, this.canvas.height);
         
@@ -225,6 +242,40 @@ class Game {
         
         requestAnimationFrame(() => this.animate());
     }
+
+    updateLeaderboard() {
+        const allEntities = [...this.bots];
+        
+        if (this.player) {
+            allEntities.push(this.player);
+        }
+
+        allEntities.sort((a, b) => b.radius - a.radius);
+
+        const top5 = allEntities.slice(0, 5);
+
+        const listElement = document.getElementById('leaderboardList');
+        listElement.innerHTML = '';
+
+        top5.forEach((entity, index) => {
+            const li = document.createElement('li');
+            
+            let displayName = entity.name.length > 10 ? entity.name.substring(0, 10) + '...' : entity.name;
+            
+            const score = Math.floor(entity.radius);
+
+            li.innerHTML = `
+                <span>${index + 1}. ${displayName}</span>
+                <span>${score}</span>
+            `;
+            
+            if (entity === this.player) {
+                li.style.color = '#00ff00'; 
+            }
+
+            listElement.appendChild(li);
+        });
+}
 }
 
 const game = new Game();
