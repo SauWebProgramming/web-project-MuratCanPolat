@@ -175,8 +175,8 @@ canvas {
 }
 #gameScore{
     position: absolute;
-    bottom: 20px;
-    left: 20px;
+    bottom: max(20px, env(safe-area-inset-bottom));
+    left: max(20px, env(safe-area-inset-left));
     color: white;
     font-size: 24px;
     font-weight: bold;
@@ -188,8 +188,8 @@ canvas {
 
 #leaderboard {
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: max(20px, env(safe-area-inset-top));
+    left: max(20px, env(safe-area-inset-left));
     width: 200px;
     background: rgba(0, 0, 0, 0.4); 
     padding: 15px;
@@ -311,6 +311,42 @@ canvas {
         left: max(15px, env(safe-area-inset-left));
         transform: scale(0.8);
         transform-origin: bottom left;
+    }
+}
+@media (max-height: 500px) {
+    #uiContainer {
+        padding: 10px;
+        width: 80%;
+    }
+
+    #uiContainer h1 {
+        font-size: 1.4rem;
+        margin-bottom: 5px;
+        display: inline-block;
+        margin-right: 15px;
+    }
+
+    #nickname {
+        padding: 8px;
+        margin-bottom: 5px;
+        font-size: 16px; 
+    }
+    
+    #playButton {
+        padding: 8px;
+        font-size: 1rem;
+    }
+    
+    #colorPicker {
+        height: 35px;
+        margin-bottom: 5px;
+        width: 50px; 
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    #highScore {
+        display: none;
     }
 }
 @media (orientation: portrait) and (max-width: 1024px) {

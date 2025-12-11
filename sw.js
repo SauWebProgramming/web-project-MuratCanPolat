@@ -1,4 +1,4 @@
-const CACHE_NAME = 'agar-clone-v1';
+const CACHE_NAME = 'agar-clone-v1.1';
 const ASSETS = [
   './',
   './index.html',
@@ -20,4 +20,19 @@ self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.match(e.request).then((response) => response || fetch(e.request))
   );
+});
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keyList) => {
+      return Promise.all(
+        keyList.map((key) => {
+          if (key !== CACHE_NAME) {
+            console.log('Eski cache silindi:', key);
+            return caches.delete(key);
+          }
+        })
+      );
+    })
+  );
+  return self.clients.claim();
 });
