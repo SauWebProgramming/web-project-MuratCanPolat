@@ -3,10 +3,10 @@ const ASSETS = [
   './',
   './index.html',
   './style.css',
-  './js/Game.js',
-  './js/Player.js',
-  './js/Bot.js',
-  './js/Food.js',
+  './js/game.js',
+  './js/player.js',
+  './js/bot.js',
+  './js/food.js',
   'https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js'
 ];
 
