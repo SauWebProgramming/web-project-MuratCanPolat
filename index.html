@@ -8,6 +8,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1a1a2e">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3930/3930432.png">
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3930/3930432.png">
 </head>
 <body>
     <section id="uiContainer">
@@ -34,7 +35,6 @@
     <div id="gameScore" >Skor: 0</div>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script type="module" src="js/Game.js"></script>
-    /* Bu kısım oyunun mobilde de çalışmasını sağlıyor */
     <script>
     if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js')

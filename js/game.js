@@ -143,6 +143,19 @@ class Game {
         }
 
         this.ctx.stroke();
+        this.ctx.save();
+    
+        this.ctx.beginPath();
+        this.ctx.lineWidth = 15;
+        this.ctx.strokeStyle = '#4b6584'; 
+        this.ctx.shadowBlur = 20;
+        this.ctx.shadowColor = '#4b6584'; 
+
+        this.ctx.lineJoin = 'round'; 
+
+        this.ctx.strokeRect(0, 0, this.worldWidth, this.worldHeight);
+
+        this.ctx.restore();
     }
 
     checkCollisions() {
